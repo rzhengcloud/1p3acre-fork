@@ -12,7 +12,11 @@ API_HOST = 'api.1point3acres.com'
 def do_checkin(headers: dict) -> str:
     with requests.Session() as session:
 
+        # Debugging headers to make sure they're set correctly
+        print("Headers being sent:", headers)
+        
         with session.get(url=f'https://{API_HOST}/api/users/checkin', headers=headers) as r:
+            print("Response from checkin GET:", r.text)  # Check the response content
             emotion = {
                 'qdxq': random.choice(r.json()['emotion'])['qdxq'],
                 'todaysay': ''.join(chr(random.randint(0x4E00, 0x9FBF)) for _ in range(random.randint(5, 10))),
@@ -20,6 +24,7 @@ def do_checkin(headers: dict) -> str:
             print('emotion for today:', emotion)
 
         with session.post(url=f'https://{API_HOST}/api/users/checkin', headers=headers, json=emotion) as r:
+            print("Response from checkin POST:", r.text)  # Check the response content
             return r.json()['msg']
 
 
